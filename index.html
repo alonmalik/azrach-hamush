@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>אזרח חמוש</title>
+<!-- ===== נתיבי תמונות: להחלפה כאן בלבד ===== -->
+<style id="image-paths">
+  :root{
+    --img-about:url("images/range-table.webp");      /* רקע "מי אני" */
+    --img-contact:url("images/range-closeup.webp");  /* רקע "יצירת קשר" */
+  }
+</style>
+<script>
+  // HERO: תמונות מתחלפות (בסדר הזה). כל תמונה כבר חתוכה ל-4:5. תמונה אחת = בלי החלפה.
+  window.HERO_IMAGES = [
+    "images/hero-suit.webp",     // בחליפה, צילום בינוני
+    "images/hero-goggles.webp"   // משקפי מגן, פנים וכתפיים
+  ];
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a1628;
+    --bg-2:#0f2140;
+    --steel:#132849;
+    --steel-2:#1b3358;
+    --steel-line:#264270;
+    --muted:#a3b3ca;
+    --text:#ffffff;
+    --accent:#ff7a1a;
+    --on-accent:#0a1628;
+    --accent-dim:rgba(255,122,26,.14);
+    --radius:14px;
+    --gutter:clamp(18px,5vw,48px);
+    --max:1180px;
+    --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden;overflow-x:clip}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:"Heebo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    font-weight:400;line-height:1.5;overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  svg{display:block}
+  .wrap{max-width:var(--max);margin-inline:auto;padding-inline:var(--gutter)}
+  section{position:relative;padding-block:clamp(64px,11vw,128px)}
+  h1,h2,h3{margin:0;font-weight:900;line-height:1.05;letter-spacing:-.02em}
+  h2{font-size:clamp(2rem,6.6vw,4rem);max-width:18ch}
+  .lead{margin:22px 0 0;font-size:clamp(1.1rem,3.4vw,1.35rem);color:#d5deea;max-width:46ch;line-height:1.6}
+  .ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+  .accent{color:var(--accent)}
+
+  /* textures */
+  .grid-tex::before,.noise-tex::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0}
+  .grid-tex::before{
+    background-image:
+      linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:44px 44px;
+    -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 85%);
+            mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 85%);
+  }
+  .noise-tex::after{background-image:var(--noise);opacity:.05;mix-blend-mode:overlay}
+  section>.wrap{position:relative;z-index:1}
+
+  /* buttons */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.6em;
+    min-height:56px;padding:0 1.6em;border-radius:999px;
+    font-weight:900;font-size:1.08rem;letter-spacing:.01em;
+    transition:transform .2s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease;
+  }
+  .btn svg{width:22px;height:22px;flex:none}
+  .btn-accent{background:var(--accent);color:var(--on-accent);box-shadow:0 10px 30px -10px rgba(255,122,26,.6)}
+  .btn-accent:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(255,122,26,.8)}
+  .btn-ghost{border:1.5px solid var(--steel-line);background:rgba(255,255,255,.03)}
+  .btn-ghost:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .btn:focus-visible,.collab:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  /* ============ HERO ============ */
+  .hero{
+    min-height:100svh;display:flex;align-items:center;overflow:hidden;overflow:clip;contain:paint;
+    padding-block:clamp(48px,9vw,96px);
+    background:radial-gradient(ellipse 70% 60% at 30% 40%,#14294b 0%,var(--bg) 70%);
+  }
+  .hero-grid{display:grid;gap:clamp(28px,6vw,64px);align-items:center;width:100%}
+  .hero-copy{position:relative;z-index:3}
+  .tag{
+    display:inline-flex;align-items:center;gap:.6em;margin-bottom:22px;
+    padding:7px 14px;border-radius:999px;
+    font-size:clamp(.82rem,2.6vw,.95rem);font-weight:700;color:#e6ecf4;
+    background:rgba(15,33,64,.75);border:1px solid var(--steel-line);
+  }
+  .tag::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none}
+  .hero h1{font-size:clamp(2.6rem,10vw,5.6rem);line-height:1;max-width:12ch}
+  .hero .sub{margin:22px 0 32px;font-size:clamp(1.1rem,3.6vw,1.4rem);color:#d5deea;max-width:34ch;line-height:1.55}
+  .hero-btns{display:flex;flex-wrap:wrap;gap:12px}
+  .crosshair{
+    position:absolute;z-index:0;pointer-events:none;
+    width:min(150vw,900px);aspect-ratio:1;
+    top:50%;left:50%;transform:translate(-50%,-50%);
+    color:#fff;opacity:.1;
+  }
+  .crosshair .ring{transform-box:fill-box;transform-origin:center;animation:spin 70s linear infinite}
+  .crosshair .ring.rev{animation-duration:110s;animation-direction:reverse}
+  .crosshair .ring.fast{animation-duration:40s}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .stripe{
+    position:absolute;z-index:1;pointer-events:none;
+    width:180%;height:clamp(54px,9vw,96px);
+    left:-40%;bottom:14%;transform:rotate(-9deg);
+    background:var(--accent);
+    box-shadow:0 0 80px rgba(255,122,26,.3);
+  }
+  .stripe.thin{height:3px;bottom:calc(14% + clamp(78px,12vw,128px));background:var(--accent);opacity:.7;box-shadow:none}
+  .stripe::after{
+    content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(90deg,transparent 0 22px,rgba(10,22,40,.18) 22px 24px);
+  }
+  .stripe.thin::after{display:none}
+
+  /* photo: blended into the background with soft edge fades, no frame */
+  .photo-wrap{position:relative;z-index:2;justify-self:center;width:min(100%,400px)}
+  .photo-wrap::before{
+    content:"";position:absolute;inset:8% 4% 4%;z-index:-1;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(255,122,26,.18),transparent);filter:blur(30px);
+  }
+  .photo{
+    position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;
+    /* two fades intersected: soft on every edge, strongest at the bottom */
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 62%,transparent 100%),linear-gradient(to right,transparent 0,#000 18%,#000 82%,transparent 100%);
+    -webkit-mask-composite:source-in;
+            mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 62%,transparent 100%),linear-gradient(to right,transparent 0,#000 18%,#000 82%,transparent 100%);
+            mask-composite:intersect;
+  }
+  .hero-slide{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;object-position:50% 30%;
+    opacity:0;transition:opacity 1s ease;
+  }
+  .hero-slide.on{opacity:1}
+  .photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(10,22,40,0) 38%);pointer-events:none}
+
+  /* section photo backgrounds */
+  .has-bg{isolation:isolate}
+  .sec-bg{
+    position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background-image:linear-gradient(180deg,rgba(10,22,40,.95) 0%,rgba(10,22,40,.82) 45%,rgba(10,22,40,.96) 100%),var(--bg-img);
+    background-size:cover;background-position:center;
+    filter:grayscale(.85) contrast(1.1);
+  }
+
+  /* ============ ABOUT ============ */
+  .about{background:var(--bg)}
+  .about p{margin:0;font-size:clamp(1.3rem,4.4vw,2.1rem);font-weight:700;line-height:1.4;max-width:30ch}
+  .about p+p{margin-top:.8em;font-weight:400;color:#d5deea;font-size:clamp(1.1rem,3.4vw,1.45rem);max-width:40ch}
+
+  /* ============ MOTTO ============ */
+  .motto{background:var(--bg-2)}
+  .motto .tiles{margin-top:0}
+
+  /* ============ STATS ============ */
+  .stats{background:var(--bg);border-block:1px solid var(--steel)}
+  .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--steel-line);border:1px solid var(--steel-line);border-radius:var(--radius);overflow:hidden}
+  .stat{background:var(--bg-2);padding:clamp(22px,4vw,40px) clamp(14px,3vw,32px);position:relative}
+  .stat::before{content:"";position:absolute;top:0;right:0;width:36px;height:3px;background:var(--accent)}
+  .stat .num{font-weight:900;font-size:clamp(2.6rem,11vw,5.2rem);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .stat .lbl{margin-top:10px;color:var(--muted);font-size:clamp(.95rem,2.6vw,1.1rem)}
+  .check{width:clamp(2.6rem,11vw,5.2rem);height:clamp(2.6rem,11vw,5.2rem)}
+  .check circle{fill:var(--accent)}
+  .check path{fill:none;stroke:var(--on-accent);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;transition:stroke-dashoffset .9s .3s cubic-bezier(.65,0,.35,1)}
+  .stat.done .check path{stroke-dashoffset:0}
+
+  /* ============ VIDEOS (Instagram embeds) ============ */
+  .videos{background:var(--bg-2)}
+  .videos .wrap{max-width:1400px}
+  .videos h2{margin-bottom:clamp(32px,5vw,48px)}
+  .reels{display:grid;grid-template-columns:1fr;gap:22px}
+  .reel{
+    display:flex;flex-direction:column;padding:14px;border-radius:18px;
+    background:linear-gradient(180deg,var(--steel),var(--bg-2));border:1px solid var(--steel-line);
+    box-shadow:0 30px 60px -30px rgba(4,10,20,.9);
+    transition:border-color .3s ease,transform .3s ease;
+  }
+  .reel:hover{border-color:rgba(255,122,26,.6)}
+  .reel-frame{position:relative;border-radius:12px;overflow:hidden;background:var(--bg);flex:1}
+  .reel-frame blockquote.instagram-media{margin:0;padding:0;border:0;background:none}
+  .reel-frame iframe.instagram-media{
+    min-width:0!important;width:100%!important;max-width:100%!important;
+    margin:0!important;border:0!important;border-radius:12px!important;box-shadow:none!important;
+  }
+  /* hide Instagram's likes + comment rows; our view count replaces them */
+  .reel{--ig-cut:112px}
+  .reel-frame.ok iframe.instagram-media{margin-bottom:calc(-1 * var(--ig-cut))!important}
+  .reel-frame.ok{border-radius:12px 12px 0 0}
+  .reel-views{
+    display:flex;align-items:center;gap:8px;padding:12px 14px;border-radius:0 0 12px 12px;
+    background:var(--bg);border-top:1px solid var(--steel-line);font-weight:900;font-size:1.05rem;
+  }
+  .reel-views svg{width:20px;height:20px;color:var(--accent);flex:none}
+  .reel-views .ltr{font-variant-numeric:tabular-nums}
+  .reel-views small{font-weight:400;color:var(--muted);font-size:.95rem}
+  .reel-frame:not(.ok) .instagram-media{position:absolute!important;inset:0;opacity:0;pointer-events:none}
+  .reel-frame.ok .reel-fallback{display:none}
+  .reel-fallback{
+    position:relative;aspect-ratio:9/14;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+    background:radial-gradient(ellipse at 50% 40%,var(--steel-2),var(--bg) 75%);
+  }
+  .reel-fallback .fb-x{position:absolute;inset:0;width:100%;height:100%;color:#fff;opacity:.08}
+  .play{
+    position:relative;width:72px;height:72px;border-radius:50%;
+    background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.5);
+    display:grid;place-items:center;transition:background-color .25s,border-color .25s,transform .25s;
+  }
+  .play svg{width:28px;height:28px;margin-left:4px}
+  .reel:hover .play{background:var(--accent);border-color:var(--accent);transform:scale(1.08)}
+  .reel-fallback .btn{position:relative;min-height:48px;font-size:1rem}
+
+  /* ============ TILES (motto + partnerships) ============ */
+  .partners{background:var(--bg)}
+  .tiles{display:grid;gap:14px;margin-top:clamp(36px,6vw,56px)}
+  .tile{
+    position:relative;padding:28px 24px;border-radius:var(--radius);
+    background:linear-gradient(180deg,var(--steel),var(--bg-2));
+    border:1px solid var(--steel-line);
+    display:flex;gap:18px;align-items:center;
+  }
+  .tile .ico{
+    flex:none;width:60px;height:60px;border-radius:12px;display:grid;place-items:center;
+    background:var(--accent-dim);color:var(--accent);border:1px solid rgba(255,122,26,.35);
+  }
+  .tile .ico svg{width:30px;height:30px}
+  .tile p{margin:0;font-size:clamp(1.12rem,3.6vw,1.3rem);font-weight:700;line-height:1.3}
+  .tile h3{font-size:clamp(1.6rem,5vw,2.2rem);margin-bottom:8px}
+  .tile .txt p{font-weight:400;color:#d5deea;font-size:clamp(1.02rem,3.2vw,1.15rem);line-height:1.5}
+
+  /* ============ COLLABS ============ */
+  .collabs{background:var(--bg-2)}
+  .collab-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+  .collab{
+    flex:0 0 calc((100% - 20px) / 3);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;
+    min-height:118px;padding:18px 8px;border-radius:12px;
+    background:var(--steel);border:1.5px solid var(--steel-line);
+    transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease,background-color .25s ease;
+  }
+  .collab svg{width:34px;height:34px;color:#cdd8e6;transition:color .25s}
+  .collab span{font-size:clamp(.86rem,3vw,1.05rem);font-weight:700;line-height:1.2}
+  .collab:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 18px 36px -18px rgba(255,122,26,.5);background:var(--steel-2)}
+  .collab:hover svg{color:var(--accent)}
+
+  /* ============ PROCESS ============ */
+  .process{background:var(--bg)}
+  .steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);margin-top:8px}
+  .track,.fill{position:absolute;top:calc(var(--dot) / 2 - 2px);height:4px;right:12.5%;left:12.5%;border-radius:4px}
+  .steps{--dot:clamp(46px,12vw,80px)}
+  .track{background:var(--steel-2)}
+  .fill{background:var(--accent);transform-origin:right center;transform:scaleX(var(--p,0));box-shadow:0 0 18px rgba(255,122,26,.5)}
+  .step{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+  .dot{
+    width:var(--dot);height:var(--dot);border-radius:50%;display:grid;place-items:center;
+    background:var(--bg);border:3px solid var(--steel-2);
+    transition:border-color .35s,background-color .35s,box-shadow .35s;
+  }
+  .dot::after{content:"";width:28%;height:28%;border-radius:50%;background:var(--steel-2);transition:background-color .35s}
+  .step.on .dot{border-color:var(--accent);background:var(--accent);box-shadow:0 0 0 6px rgba(255,122,26,.15)}
+  .step.on .dot::after{background:var(--on-accent)}
+  .step b{font-weight:900;font-size:clamp(.92rem,3.4vw,1.4rem);line-height:1.2}
+
+  /* ============ VALUES ============ */
+  .values{padding-block:clamp(40px,8vw,72px);overflow:hidden}
+  .band{
+    position:relative;background:var(--accent);padding:clamp(34px,7vw,64px) var(--gutter);
+    transform:skewY(-3deg);margin-inline:-2vw;
+  }
+  .band::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent 0 18px,rgba(10,22,40,.07) 18px 20px)}
+  .band::after{content:"";position:absolute;inset:0;background-image:var(--noise);opacity:.1;mix-blend-mode:overlay}
+  .band p{
+    position:relative;z-index:1;margin:0;transform:skewY(3deg);text-align:center;color:var(--on-accent);
+    font-weight:900;font-size:clamp(2.2rem,9.5vw,6.4rem);line-height:1;letter-spacing:-.02em;
+  }
+  .values .note{margin:clamp(28px,5vw,40px) 0 0;text-align:center;color:var(--muted);font-size:clamp(.92rem,2.8vw,1.05rem)}
+
+  /* ============ CONTACT ============ */
+  .contact{text-align:center;overflow:hidden;padding-bottom:clamp(96px,14vw,140px)}
+  .contact h2{margin-inline:auto;max-width:20ch}
+  .contact .lead{margin-inline:auto}
+  .contact-mark{width:clamp(70px,14vw,110px);height:auto;margin:0 auto 28px;color:var(--accent)}
+  .contact-mark .ring{transform-box:fill-box;transform-origin:center;animation:spin 18s linear infinite}
+  .btns{display:flex;flex-direction:column;gap:12px;margin:clamp(32px,6vw,48px) auto 0;max-width:420px}
+
+  /* floating WA */
+  .fab{
+    position:fixed;z-index:50;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));
+    width:60px;height:60px;border-radius:50%;background:var(--accent);color:var(--on-accent);
+    display:grid;place-items:center;box-shadow:0 12px 30px -8px rgba(255,122,26,.7);
+    transition:transform .3s ease,opacity .3s ease;
+  }
+  .fab svg{width:30px;height:30px}
+  .fab::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--accent);animation:pulse 2.4s ease-out infinite}
+  @keyframes pulse{from{transform:scale(1);opacity:.8}to{transform:scale(1.6);opacity:0}}
+  .fab.hide{transform:translateY(120px);opacity:0;pointer-events:none}
+
+  /* reveal */
+  .js .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+  .js .reveal.in{opacity:1;transform:none}
+  .js .stagger>*{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+  .js .stagger.in>*{opacity:1;transform:none}
+  .js .stagger.in>*:nth-child(2){transition-delay:.07s}
+  .js .stagger.in>*:nth-child(3){transition-delay:.14s}
+  .js .stagger.in>*:nth-child(4){transition-delay:.21s}
+  .js .stagger.in>*:nth-child(5){transition-delay:.28s}
+  .js .stagger.in>*:nth-child(6){transition-delay:.35s}
+  .js .stagger.in>*:nth-child(7){transition-delay:.42s}
+  .js .stagger.in>.collab:hover{transition-delay:0s}
+
+  /* ============ BREAKPOINTS ============ */
+  @media (min-width:640px){
+    .tiles{grid-template-columns:repeat(2,1fr)}
+    .btns{flex-direction:row;flex-wrap:wrap;justify-content:center;max-width:none}
+    .reels{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (min-width:768px){
+    .fab{display:none}
+    .collab{min-height:150px;flex-basis:calc((100% - 30px) / 4)}
+  }
+  @media (min-width:1100px){
+    .reels{grid-template-columns:repeat(4,1fr);gap:16px}
+  }
+  @media (min-width:960px){
+    .hero-grid{grid-template-columns:1.15fr .85fr}
+    .stats-grid{grid-template-columns:repeat(4,1fr)}
+    .tiles{grid-template-columns:repeat(4,1fr)}
+    .tiles.three{grid-template-columns:repeat(3,1fr)}
+    .tile{flex-direction:column;align-items:flex-start;padding:32px 26px 36px;min-height:220px;justify-content:space-between}
+    .stripe{bottom:2%}
+    .stripe.thin{bottom:calc(2% + 100px)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+    .js .reveal,.js .stagger>*{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.85 9.85 0 0 0 12.04 2Zm0 18.15a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24a8.24 8.24 0 0 1 8.24 8.25c0 4.54-3.7 8.23-8.25 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.78.97-.15.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23a7.48 7.48 0 0 1-1.38-1.72c-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48a.92.92 0 0 0-.66.31c-.23.25-.87.85-.87 2.07s.89 2.4 1.01 2.57c.12.16 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.22-.16-.47-.28Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path fill="#fff" d="M7 4.5v15a1 1 0 0 0 1.53.85l12-7.5a1 1 0 0 0 0-1.7l-12-7.5A1 1 0 0 0 7 4.5Z"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="fb-x"viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor"><circle cx="100" cy="100" r="80" stroke-width="1.5"/><circle cx="100" cy="100" r="52" stroke-width="1" stroke-dasharray="3 5"/><path d="M100 0v70M100 130v70M0 100h70M130 100h70" stroke-width="1.5"/></symbol>
+
+  <!-- motto -->
+  <symbol id="m-license" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"/><circle cx="8.5" cy="11" r="2.3"/><path d="M5.2 16.2c.6-1.6 1.8-2.4 3.3-2.4s2.7.8 3.3 2.4"/><path d="M14.5 10h4.5M14.5 13.5h3"/></symbol>
+  <symbol id="m-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6"/><rect x="3" y="6" width="18" height="14" rx="2.5"/><path d="M3 11.5h18"/><path d="M10 11.5v2h4v-2"/></symbol>
+  <symbol id="m-train" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/><path d="M12 1.5v3.5M12 19v3.5M1.5 12H5M19 12h3.5"/></symbol>
+
+  <!-- partnerships -->
+  <symbol id="i-audience" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M15.8 14.1c2.9.3 5.2 2.5 5.2 5.9"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 20 5.5v6c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10v-6Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10.3 5 7.8 4.5 3 4.5v14c4.8 0 7.3.5 9 2 1.7-1.5 4.2-2 9-2v-14c-4.8 0-7.3.5-9 2Z"/><path d="M12 6.5v14"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20.5h18"/><path d="m4.5 16 5-5 3.5 3.5L20 7.5"/><path d="M15 7.5h5v5"/></symbol>
+
+  <!-- collabs -->
+  <symbol id="c-review" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.3 15.3 5.2 5.2"/><path d="m7.8 10.6 1.9 1.9 3.5-3.7"/></symbol>
+  <symbol id="c-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6.5" width="19" height="13.5" rx="2"/><path d="M8 6.5 9.5 4h5L16 6.5"/><circle cx="12" cy="13.2" r="3.7"/><circle cx="18" cy="9.5" r=".5" fill="currentColor"/></symbol>
+  <symbol id="c-cert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 17H4.5A1.5 1.5 0 0 1 3 15.5v-10A1.5 1.5 0 0 1 4.5 4h15A1.5 1.5 0 0 1 21 5.5V11"/><path d="M7 8.5h10M7 12h5"/><circle cx="17.5" cy="15" r="3"/><path d="M15.8 17.5 15.2 22l2.3-1.2 2.3 1.2-.6-4.5"/></symbol>
+  <symbol id="c-series" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="7.5" width="14.5" height="13" rx="1.6"/><path d="M6.5 4.5h12A2.5 2.5 0 0 1 21 7v9.5"/><path d="M8 11v5.5l4.5-2.75Z"/></symbol>
+  <symbol id="c-ongoing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-14.2 5"/><path d="M4 12a8 8 0 0 1 14.2-5"/><path d="M18.5 3v4h-4"/><path d="M5.5 21v-4h4"/></symbol>
+  <symbol id="c-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10.5 18.5h3"/><path d="M10.3 7.8v5.4l4.3-2.7Z"/></symbol>
+</svg>
+
+<!-- ================= HERO ================= -->
+<header class="hero noise-tex">
+  <svg class="crosshair" viewBox="0 0 600 600" aria-hidden="true" fill="none" stroke="currentColor">
+    <g class="ring"><circle cx="300" cy="300" r="290" stroke-width="1.5" stroke-dasharray="2 9"/></g>
+    <g class="ring rev">
+      <circle cx="300" cy="300" r="245" stroke-width="2" stroke-dasharray="90 24 8 24"/>
+    </g>
+    <circle cx="300" cy="300" r="195" stroke-width="1.2"/>
+    <g class="ring fast">
+      <circle cx="300" cy="300" r="150" stroke-width="3" stroke-dasharray="40 196"/>
+    </g>
+    <circle cx="300" cy="300" r="105" stroke-width="1" stroke-dasharray="4 6"/>
+    <path d="M300 0v240M300 360v240M0 300h240M360 300h240" stroke-width="1.5"/>
+    <path d="M300 150v-14M300 450v14M150 300h-14M450 300h14" stroke-width="5"/>
+    <g stroke-width="1.5">
+      <path d="M292 200h16M292 220h16M286 240h28M292 380h16M292 400h16M286 360h28"/>
+      <path d="M200 292v16M220 292v16M240 286v28M400 292v16M380 292v16M360 286v28"/>
+    </g>
+    <circle cx="300" cy="300" r="5" fill="#ff7a1a" stroke="none"/>
+  </svg>
+  <div class="stripe" aria-hidden="true"></div>
+  <div class="stripe thin" aria-hidden="true"></div>
+
+  <div class="wrap hero-grid">
+    <div class="hero-copy reveal">
+      <span class="tag">אזרח חמוש · תרבות הנשק הישראלית</span>
+      <h1>הרישיון הוא <span class="accent">רק ההתחלה.</span></h1>
+      <p class="sub">אני מתעד את הדרך מאזרח עם נשק לאזרח מוכן, ומזמין את מי שמאמין באותו דבר להצטרף.</p>
+      <div class="hero-btns">
+        <a class="btn btn-accent" href="#contact">לשיתופי פעולה
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#videos">לצפייה בתוכן</a>
+      </div>
+    </div>
+
+    <div class="photo-wrap reveal">
+      <div class="photo" id="hero-photo" role="img" aria-label="אלון"></div>
+      <script>
+      (function(){
+        var box = document.getElementById('hero-photo');
+        var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var list = (window.HERO_IMAGES || []).slice(0, reduce ? 1 : undefined);
+        var slides = list.map(function(src, i){
+          var img = document.createElement('img');
+          img.className = 'hero-slide' + (i === 0 ? ' on' : '');
+          img.alt = ''; img.decoding = 'async'; img.src = src;
+          box.appendChild(img);
+          return img;
+        });
+        if (slides.length < 2) return; // single image: no rotation
+        var cur = 0;
+        setInterval(function(){
+          slides[cur].classList.remove('on');
+          cur = (cur + 1) % slides.length;
+          slides[cur].classList.add('on');
+        }, 5000); // 4s on screen + 1s crossfade
+      })();
+      </script>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ================= ABOUT ================= -->
+  <section class="about grid-tex has-bg">
+    <div class="sec-bg" style="--bg-img:var(--img-about)" aria-hidden="true"></div>
+    <div class="wrap reveal">
+      <p>אני לא מדריך ירי. אני אזרח חמוש, לוחם מילואים ואבא, שהבין ש-<span class="accent">50 כדורים בשנה</span> זה לא מספיק.</p>
+      <p>אז התחלתי ללמוד, לשאול ולהתאמן, ולשתף את כל מה שאני לומד.</p>
+    </div>
+  </section>
+
+  <!-- ================= MOTTO ================= -->
+  <section class="motto noise-tex">
+    <div class="wrap">
+      <div class="tiles three stagger">
+        <div class="tile"><span class="ico"><svg aria-hidden="true"><use href="#m-license"/></svg></span><div class="txt"><h3>תתחמשו</h3><p>רישוי, זכאות ואחריות, בשפה פשוטה.</p></div></div>
+        <div class="tile"><span class="ico"><svg aria-hidden="true"><use href="#m-gear"/></svg></span><div class="txt"><h3>תצטיידו</h3><p>נשיאה, אחסון ותחזוקה, מנקודת מבט של צרכן.</p></div></div>
+        <div class="tile"><span class="ico"><svg aria-hidden="true"><use href="#m-train"/></svg></span><div class="txt"><h3>תתאמנו</h3><p>אימון כהרגל, לא כמטלה של פעם בשנה.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STATS ================= -->
+  <section class="stats grid-tex" id="stats">
+    <div class="wrap">
+      <div class="stats-grid stagger">
+        <div class="stat"><div class="num"><span class="ltr" data-count="6366" data-sep="1">6,366</span></div><div class="lbl">עוקבים</div></div>
+        <div class="stat"><div class="num"><span class="ltr" data-count="460" data-suffix="K">460K</span></div><div class="lbl">צפיות בתוכן נשק</div></div>
+        <div class="stat"><div class="num"><span class="ltr" data-count="10" data-suffix="K">10K</span></div><div class="lbl">צפיות בממוצע לסרטון</div></div>
+        <div class="stat" data-check>
+          <div class="num"><svg class="check" viewBox="0 0 64 64" role="img" aria-label="✓"><circle cx="32" cy="32" r="30"/><path d="M19 33l9 9 18-19"/></svg></div>
+          <div class="lbl">חשבון מאומת</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TOP VIDEOS ================= -->
+  <section class="videos noise-tex" id="videos">
+    <div class="wrap">
+      <h2 class="reveal">התוכן שהקהל בוחר</h2>
+      <div class="reels stagger">
+        <article class="reel">
+          <div class="reel-frame">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DY6xADJI5hj/" data-instgrm-version="14"></blockquote>
+            <div class="reel-fallback">
+              <svg class="fb-x" aria-hidden="true"><use href="#fb-x"/></svg>
+              <span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>
+              <a class="btn btn-accent" target="_blank" rel="noopener" href="https://www.instagram.com/reel/DY6xADJI5hj/"><svg aria-hidden="true"><use href="#i-ig"/></svg>אינסטגרם</a>
+            </div>
+          </div>
+          <div class="reel-views"><svg aria-hidden="true"><use href="#i-eye"/></svg><span class="ltr">206K</span><small>צפיות</small></div>
+        </article>
+        <article class="reel">
+          <div class="reel-frame">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DYBkQg6Iq50/" data-instgrm-version="14"></blockquote>
+            <div class="reel-fallback">
+              <svg class="fb-x" aria-hidden="true"><use href="#fb-x"/></svg>
+              <span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>
+              <a class="btn btn-accent" target="_blank" rel="noopener" href="https://www.instagram.com/reel/DYBkQg6Iq50/"><svg aria-hidden="true"><use href="#i-ig"/></svg>אינסטגרם</a>
+            </div>
+          </div>
+          <div class="reel-views"><svg aria-hidden="true"><use href="#i-eye"/></svg><span class="ltr">58.9K</span><small>צפיות</small></div>
+        </article>
+        <article class="reel">
+          <div class="reel-frame">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DaA9UBro5bs/" data-instgrm-version="14"></blockquote>
+            <div class="reel-fallback">
+              <svg class="fb-x" aria-hidden="true"><use href="#fb-x"/></svg>
+              <span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>
+              <a class="btn btn-accent" target="_blank" rel="noopener" href="https://www.instagram.com/reel/DaA9UBro5bs/"><svg aria-hidden="true"><use href="#i-ig"/></svg>אינסטגרם</a>
+            </div>
+          </div>
+          <div class="reel-views"><svg aria-hidden="true"><use href="#i-eye"/></svg><span class="ltr">52.6K</span><small>צפיות</small></div>
+        </article>
+        <article class="reel">
+          <div class="reel-frame">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DYNV_Phoqyv/" data-instgrm-version="14"></blockquote>
+            <div class="reel-fallback">
+              <svg class="fb-x" aria-hidden="true"><use href="#fb-x"/></svg>
+              <span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>
+              <a class="btn btn-accent" target="_blank" rel="noopener" href="https://www.instagram.com/reel/DYNV_Phoqyv/"><svg aria-hidden="true"><use href="#i-ig"/></svg>אינסטגרם</a>
+            </div>
+          </div>
+          <div class="reel-views"><svg aria-hidden="true"><use href="#i-eye"/></svg><span class="ltr">18.6K</span><small>צפיות</small></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PARTNERSHIPS ================= -->
+  <section class="partners grid-tex">
+    <div class="wrap">
+      <h2 class="reveal">שותפות, <span class="accent">לא פרסומת</span></h2>
+      <p class="lead reveal">אני עובד עם מטווחים, מדריכים, חנויות ויצרני ציוד שיכולים לעזור לאזרחים חמושים להיות מוכנים יותר. אני ממליץ רק על מה שהייתי משתמש בו בעצמי.</p>
+      <div class="tiles stagger">
+        <div class="tile"><span class="ico"><svg aria-hidden="true"><use href="#i-audience"/></svg></span><p>קהל שנושא נשק ביומיום</p></div>
+        <div class="tile"><span class="ico"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><p>אמון שנבנה על שקיפות</p></div>
+        <div class="tile"><span class="ico"><svg aria-hidden="true"><use href="#i-book"/></svg></span><p>תוכן שמלמד, לא רק מציג</p></div>
+        <div class="tile"><span class="ico"><svg aria-hidden="true"><use href="#i-chart"/></svg></span><p>10 שנות ניסיון בשיווק ואסטרטגיה</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COLLABS ================= -->
+  <section class="collabs noise-tex">
+    <div class="wrap">
+      <div class="collab-grid stagger">
+        <div class="collab" tabindex="0"><svg aria-hidden="true"><use href="#c-review"/></svg><span>סקירת ציוד</span></div>
+        <div class="collab" tabindex="0"><svg aria-hidden="true"><use href="#m-train"/></svg><span>יום אימון במטווח</span></div>
+        <div class="collab" tabindex="0"><svg aria-hidden="true"><use href="#c-camera"/></svg><span>תיעוד קורס</span></div>
+        <div class="collab" tabindex="0"><svg aria-hidden="true"><use href="#c-cert"/></svg><span>ליווי חידוש רישיון</span></div>
+        <div class="collab" tabindex="0"><svg aria-hidden="true"><use href="#c-series"/></svg><span>סדרת תוכן משותפת</span></div>
+        <div class="collab" tabindex="0"><svg aria-hidden="true"><use href="#c-ongoing"/></svg><span>שיתוף פעולה מתמשך</span></div>
+        <div class="collab" tabindex="0"><svg aria-hidden="true"><use href="#c-phone"/></svg><span>תוכן לערוצי המותג</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROCESS ================= -->
+  <section class="process grid-tex">
+    <div class="wrap">
+      <div class="steps reveal" id="steps">
+        <div class="track" aria-hidden="true"></div>
+        <div class="fill" aria-hidden="true"></div>
+        <div class="step"><span class="dot" aria-hidden="true"></span><b>מכירים</b></div>
+        <div class="step"><span class="dot" aria-hidden="true"></span><b>מתכננים יחד</b></div>
+        <div class="step"><span class="dot" aria-hidden="true"></span><b>יוצרים</b></div>
+        <div class="step"><span class="dot" aria-hidden="true"></span><b>לומדים מהתוצאות</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VALUES ================= -->
+  <section class="values">
+    <div class="band reveal"><p>בטיחות. אחריות. שקיפות.</p></div>
+    <p class="note wrap reveal">כל תוכן בשיתוף פעולה מסומן בגילוי נאות.</p>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="contact grid-tex noise-tex has-bg" id="contact">
+    <div class="sec-bg" style="--bg-img:var(--img-contact)" aria-hidden="true"></div>
+    <div class="wrap">
+      <svg class="contact-mark reveal" viewBox="0 0 100 100" fill="none" stroke="currentColor" aria-hidden="true">
+        <g class="ring"><circle cx="50" cy="50" r="46" stroke-width="2" stroke-dasharray="20 8"/></g>
+        <circle cx="50" cy="50" r="30" stroke-width="2"/>
+        <path d="M50 8v28M50 64v28M8 50h28M64 50h28" stroke-width="2.5"/>
+        <circle cx="50" cy="50" r="3.5" fill="currentColor" stroke="none"/>
+      </svg>
+      <h2 class="reveal">יש לכם משהו שיכול לעזור <span class="accent">לאזרחים חמושים?</span></h2>
+      <p class="lead reveal">אשמח לשמוע.</p>
+      <div class="btns stagger">
+        <a class="btn btn-accent" target="_blank" rel="noopener" href="https://wa.me/972522350088?text=%D7%94%D7%99%D7%99%20%D7%90%D7%9C%D7%95%D7%9F,%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%93%D7%91%D7%A8%20%D7%A2%D7%9C%20%D7%A9%D7%99%D7%AA%D7%95%D7%A3%20%D7%A4%D7%A2%D7%95%D7%9C%D7%94"><svg aria-hidden="true"><use href="#i-wa"/></svg>וואטסאפ</a>
+        <a class="btn btn-ghost" target="_top" href="mailto:Desk@amalik.online"><svg aria-hidden="true"><use href="#i-mail"/></svg>מייל</a>
+        <a class="btn btn-ghost" target="_blank" rel="noopener" href="https://instagram.com/alonmalik_"><svg aria-hidden="true"><use href="#i-ig"/></svg>אינסטגרם</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<a class="fab" id="fab" target="_blank" rel="noopener" aria-label="וואטסאפ" href="https://wa.me/972522350088?text=%D7%94%D7%99%D7%99%20%D7%90%D7%9C%D7%95%D7%9F,%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%93%D7%91%D7%A8%20%D7%A2%D7%9C%20%D7%A9%D7%99%D7%AA%D7%95%D7%A3%20%D7%A4%D7%A2%D7%95%D7%9C%D7%94"><svg aria-hidden="true"><use href="#i-wa"/></svg></a>
+
+<script async src="https://www.instagram.com/embed.js" onerror="window.__igFail=true"></script>
+<script>
+// Instagram embeds: show the embed once rendered; otherwise keep the fallback card
+(function(){
+  var frames = [].slice.call(document.querySelectorAll('.reel-frame'));
+  var start = Date.now();
+  function fail(f){
+    f.classList.add('failed');
+    var e = f.querySelector('.instagram-media');
+    if (e) e.parentNode.removeChild(e);
+  }
+  function check(){
+    var pending = false;
+    frames.forEach(function(f){
+      if (f.classList.contains('ok') || f.classList.contains('failed')) return;
+      if (f.querySelector('iframe.instagram-media-rendered')){ f.classList.add('ok'); return; }
+      if (window.__igFail || Date.now() - start > 12000){ fail(f); return; }
+      pending = true;
+    });
+    if (pending) setTimeout(check, 500);
+  }
+  check();
+})();
+</script>
+<script>
+(function(){
+  var doc = document.documentElement;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!('IntersectionObserver' in window)) return; // content stays visible without JS effects
+  doc.classList.add('js');
+
+  // reveal on scroll
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:.15, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal,.stagger').forEach(function(el){ io.observe(el); });
+
+  // count-up stats
+  function fmt(n, sep){ return sep ? n.toLocaleString('en-US') : String(n); }
+  function count(el){
+    var target = +el.dataset.count, sep = el.dataset.sep, suf = el.dataset.suffix || '';
+    if (reduce){ el.textContent = fmt(target, sep) + suf; return; }
+    var t0 = null, dur = 1800;
+    function tick(t){
+      if (!t0) t0 = t;
+      var p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 4);
+      el.textContent = fmt(Math.round(target * e), sep) + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  var counters = document.querySelectorAll('[data-count]');
+  counters.forEach(function(el){ el.textContent = '0' + (el.dataset.suffix || ''); });
+  var statsIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      counters.forEach(count);
+      document.querySelectorAll('[data-check]').forEach(function(s){ s.classList.add('done'); });
+      statsIO.disconnect();
+    });
+  }, {threshold:.35});
+  statsIO.observe(document.getElementById('stats'));
+
+  // process line fills with scroll
+  var steps = document.getElementById('steps');
+  var stepEls = steps.querySelectorAll('.step');
+  var ticking = false;
+  function updateSteps(){
+    ticking = false;
+    var r = steps.getBoundingClientRect(), vh = window.innerHeight;
+    var p = (vh * .9 - r.top) / (vh * .5);
+    p = Math.max(0, Math.min(1, p));
+    steps.style.setProperty('--p', p);
+    stepEls.forEach(function(s, i){ s.classList.toggle('on', p >= i / (stepEls.length - 1) - .001); });
+
+    // hide floating button while contact buttons are on screen
+    var c = document.getElementById('contact').getBoundingClientRect();
+    fab.classList.toggle('hide', c.top < vh * .7 && c.bottom > 0);
+  }
+  var fab = document.getElementById('fab');
+  function onScroll(){ if (!ticking){ ticking = true; requestAnimationFrame(updateSteps); } }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  updateSteps();
+})();
+</script>
+</body>
+</html>
