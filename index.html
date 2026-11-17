@@ -202,6 +202,8 @@
   .ep-play{position:absolute;inset:0;text-decoration:none}
   .ep-play .pb{position:absolute;top:14px;left:14px;width:58px;height:58px;border-radius:50%;background:var(--or);display:grid;place-items:center;box-shadow:0 0 0 6px rgba(13,14,16,.5);transition:transform .2s}
   .ep-play .pb svg{width:24px;height:24px;margin-left:3px}
+  .ep-play.pb-low .pb{top:auto;bottom:14px}
+  @media (max-width:600px){.ep-play .pb{width:44px;height:44px;top:10px;left:10px;box-shadow:0 0 0 4px rgba(13,14,16,.5)}.ep-play.pb-low .pb{top:auto;bottom:10px}.ep-play .pb svg{width:18px;height:18px;margin-left:2px}}
   .ep-play:hover .pb,.ep-play:focus-visible .pb{transform:scale(1.07)}
   .ep-body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:8px}
   .ep h3{font-weight:800;font-size:clamp(1.35rem,1.1rem + .8vw,1.75rem);line-height:1.15}
@@ -441,7 +443,7 @@
         <article class="ep">
           <div class="ep-media">
             <img src="images/ep01.webp" width="960" height="540" alt="" loading="lazy" decoding="async">
-            <a class="ep-play" href="https://youtu.be/Y81A3HqVYDM" target="_blank" rel="noopener" data-yt="Y81A3HqVYDM" data-title="אבא, אקדח בן 42 ורישיון אחד לחדש" aria-label="לצפייה בפרק: אבא, אקדח בן 42 ורישיון אחד לחדש"><span class="pb" aria-hidden="true"><svg><use href="#i-play-dark"/></svg></span></a>
+            <a class="ep-play pb-low" href="https://youtu.be/Y81A3HqVYDM" target="_blank" rel="noopener" data-yt="Y81A3HqVYDM" data-title="אבא, אקדח בן 42 ורישיון אחד לחדש" aria-label="לצפייה בפרק: אבא, אקדח בן 42 ורישיון אחד לחדש"><span class="pb" aria-hidden="true"><svg><use href="#i-play-dark"/></svg></span></a>
           </div>
           <div class="ep-body">
             <h3>אבא, אקדח בן 42 ורישיון אחד לחדש</h3>
