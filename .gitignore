@@ -1,0 +1,7 @@
+# קבצי עבודה פרטיים, לא עולים לאתר הציבורי
+handoff/
+azrach-hamush-handoff/
+azrach-hamush-handoff.zip
+project.json
+*.zip
+CLAUDE.local.md
