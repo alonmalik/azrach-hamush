@@ -45,7 +45,7 @@
       "url": "https://armed.co.il/",
       "image": "https://armed.co.il/images/og-share.jpg",
       "jobTitle": "יוצר תוכן",
-      "sameAs": ["https://www.instagram.com/alonmalik_", "https://www.youtube.com/@Alon_Malik"]
+      "sameAs": ["https://www.instagram.com/alonmalik_", "https://www.youtube.com/@Alon_Malik", "https://x.com/malikalon7"]
     },
     {
       "@type": "WebSite",
@@ -238,6 +238,17 @@
   .reel-views span:only-child{font-weight:700;color:var(--muted);font-size:1rem}
   .videos-more{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(20px,3vw,32px)}
 
+  /* ============ כל הרשתות ============ */
+  .hub{padding-top:0}
+  .hub-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .hub-card{height:100%;background:var(--plate);border-top:4px solid var(--or);padding:20px;display:flex;flex-direction:column;gap:6px;text-decoration:none;transition:background-color .2s}
+  .hub-card:hover{background:#1C1D21}
+  .hub-card svg{width:34px;height:34px;color:var(--or);margin-bottom:8px}
+  .hub-card b{font-weight:800;font-size:1.4rem;line-height:1.1}
+  .hub-handle{color:var(--or);font-weight:700;font-size:1.02rem;align-self:flex-start}
+  .hub-what{color:var(--muted);font-size:1.08rem;line-height:1.35}
+  h2 .or{white-space:nowrap}
+
   /* ============ שותפות ============ */
   .tiles{list-style:none;margin:clamp(28px,4vw,44px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
   .tiles li{background:var(--plate);padding:20px;display:flex;flex-direction:column;gap:14px;font-weight:700;font-size:1.2rem;line-height:1.25}
@@ -295,6 +306,10 @@
   @media (max-width:1000px){
     .reels{grid-template-columns:repeat(2,minmax(0,1fr))}
     .tiles,.collab-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .hub-grid{grid-template-columns:1fr}
+    .hub-card{display:grid;grid-template-columns:auto 1fr;column-gap:16px;row-gap:4px;align-items:center;padding:16px 18px}
+    .hub-card svg{grid-column:1;grid-row:1 / span 3;margin:0;width:38px;height:38px}
+    .hub-card > :not(svg){grid-column:2;justify-self:start}
     .collab:last-child:nth-child(odd){grid-column:1/-1;min-height:0}
     .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:36px}
   }
@@ -338,6 +353,7 @@
   <symbol id="c-ongoing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-14.2 5"/><path d="M4 12a8 8 0 0 1 14.2-5"/><path d="M18.5 3v4h-4"/><path d="M5.5 21v-4h4"/></symbol>
   <symbol id="c-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10.5 18.5h3"/><path d="M10.3 7.8v5.4l4.3-2.7Z"/></symbol>
   <symbol id="i-yt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="M10 9.3v5.4l4.6-2.7Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path fill="currentColor" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3Zm-1.08 16.2h1.7L7.4 4.73H5.58l11.09 14.47Z"/></symbol>
   <symbol id="i-play-dark" viewBox="0 0 24 24"><path fill="#0D0E10" d="M7 4.5v15a1 1 0 0 0 1.53.85l12-7.5a1 1 0 0 0 0-1.7l-12-7.5A1 1 0 0 0 7 4.5Z"/></symbol>
 </svg>
 
@@ -347,7 +363,8 @@
     <nav aria-label="ניווט ראשי">
       <ul>
         <li><a href="#series">הסדרה</a></li>
-        <li><a href="#partners">שיתופי פעולה</a></li>
+        <li><a href="#hub">רשתות</a></li>
+        <li><a href="#partners">למותגים</a></li>
       </ul>
     </nav>
     <a class="btn btn-or" href="#contact" data-goal="header-contact">יצירת קשר</a>
@@ -370,8 +387,8 @@
         <h1 id="h1">הרישיון הוא <span class="or">רק ההתחלה.</span></h1>
         <p class="sub">אני מתעד את הדרך מאזרח עם נשק לאזרח מוכן, ומזמין את מי שמאמין באותו דבר להצטרף.</p>
         <div class="btns">
-          <a class="btn btn-or" href="#contact" data-goal="hero-collab">לשיתופי פעולה</a>
-          <a class="btn btn-ghost" href="#series" data-goal="hero-watch">לצפייה בתוכן</a>
+          <a class="btn btn-or" href="#series" data-goal="hero-watch">לצפייה בתוכן</a>
+          <a class="btn btn-ghost" href="#hub" data-goal="hero-hub">לכל הרשתות</a>
         </div>
       </div>
     </div>
@@ -405,22 +422,6 @@
         <li><span class="num" aria-hidden="true">2</span><div><h3>תצטיידו</h3><p>נשיאה, אחסון ותחזוקה, מנקודת מבט של צרכן.</p></div></li>
         <li><span class="num" aria-hidden="true">3</span><div><h3>תתאמנו</h3><p>אימון כהרגל, לא כמטלה של פעם בשנה.</p></div></li>
       </ol>
-    </div>
-  </section>
-
-  <!-- ================= מספרים ================= -->
-  <section class="stats" id="stats" aria-labelledby="stats-h">
-    <div class="wrap">
-      <h2 id="stats-h" class="sr-only">במספרים</h2>
-      <div class="stats-grid">
-        <div class="stat"><div class="n"><span class="ltr" data-count="6366" data-sep="1">6,366</span></div><div class="lbl">עוקבים</div></div>
-        <div class="stat"><div class="n"><span class="ltr" data-count="460" data-suffix="K">460K</span></div><div class="lbl">צפיות בתוכן נשק</div></div>
-        <div class="stat"><div class="n"><span class="ltr" data-count="10" data-suffix="K">10K</span></div><div class="lbl">חציון צפיות לסרטון</div></div>
-        <div class="stat">
-          <div class="n"><svg class="check" viewBox="0 0 64 64" role="img" aria-label="מאומת"><circle cx="32" cy="32" r="29"/><path d="M19 33l9 9 18-19"/></svg></div>
-          <div class="lbl">חשבון מאומת</div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -491,6 +492,21 @@
     </div>
   </section>
 
+  <!-- ================= כל הרשתות ================= -->
+  <section class="hub" id="hub" aria-labelledby="hub-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="chip">רשתות</span>
+        <h2 id="hub-h">כל התוכן, <span class="or">בכל הרשתות</span></h2>
+      </div>
+      <ul class="hub-grid">
+        <li><a class="hub-card" href="https://www.youtube.com/@Alon_Malik" target="_blank" rel="noopener" data-goal="hub-youtube"><svg aria-hidden="true"><use href="#i-yt"/></svg><b>יוטיוב</b><span class="ltr hub-handle">@Alon_Malik</span><span class="hub-what">הפרקים המלאים של הסדרה</span></a></li>
+        <li><a class="hub-card" href="https://instagram.com/alonmalik_" target="_blank" rel="noopener" data-goal="hub-instagram"><svg aria-hidden="true"><use href="#i-ig"/></svg><b>אינסטגרם</b><span class="ltr hub-handle">@alonmalik_</span><span class="hub-what">רילסים קצרים מהסדרה</span></a></li>
+        <li><a class="hub-card" href="https://x.com/malikalon7" target="_blank" rel="noopener" data-goal="hub-x"><svg aria-hidden="true"><use href="#i-x"/></svg><b>X</b><span class="ltr hub-handle">@malikalon7</span><span class="hub-what">סרטונים ושרשורים מהסדרה</span></a></li>
+      </ul>
+    </div>
+  </section>
+
   <!-- ================= רילסים ================= -->
   <section class="videos" id="videos" aria-labelledby="videos-h">
     <div class="wrap">
@@ -552,11 +568,24 @@
     </div>
   </section>
 
+  <!-- ================= ערכים ================= -->
+  <section class="values" id="values" aria-labelledby="values-h">
+    <div class="wrap">
+      <h2 id="values-h" class="sr-only">הערכים</h2>
+      <p class="band">בטיחות. אחריות. <span class="or">שקיפות.</span></p>
+      <p class="note">כל תוכן בשיתוף פעולה מסומן בגילוי נאות.</p>
+    </div>
+  </section>
+
+  <!-- ================= למותגים ================= -->
   <!-- ================= שותפות ================= -->
   <section class="partners" id="partners" aria-labelledby="partners-h">
     <div class="wrap">
-      <h2 id="partners-h">שותפות, <span class="or">לא פרסומת</span></h2>
-      <p class="lead" style="margin-top:20px">אני עובד עם מטווחים, מדריכים, חנויות ויצרני ציוד שיכולים לעזור לאזרחים חמושים להיות מוכנים יותר. אני ממליץ רק על מה שהייתי משתמש בו בעצמי.</p>
+      <div class="sec-head">
+        <span class="chip">למותגים</span>
+        <h2 id="partners-h">שותפות, <span class="or">לא פרסומת</span></h2>
+      </div>
+      <p class="lead">אני עובד עם מטווחים, מדריכים, חנויות ויצרני ציוד שיכולים לעזור לאזרחים חמושים להיות מוכנים יותר. אני ממליץ רק על מה שהייתי משתמש בו בעצמי.</p>
       <ul class="tiles">
         <li><svg aria-hidden="true"><use href="#i-audience"/></svg>קהל שנושא נשק ביומיום</li>
         <li><svg aria-hidden="true"><use href="#i-shield"/></svg>אמון שנבנה על שקיפות</li>
@@ -588,6 +617,22 @@
     </div>
   </section>
 
+  <!-- ================= מספרים ================= -->
+  <section class="stats" id="stats" aria-labelledby="stats-h">
+    <div class="wrap">
+      <h2 id="stats-h" class="sr-only">במספרים</h2>
+      <div class="stats-grid">
+        <div class="stat"><div class="n"><span class="ltr" data-count="6366" data-sep="1">6,366</span></div><div class="lbl">עוקבים</div></div>
+        <div class="stat"><div class="n"><span class="ltr" data-count="460" data-suffix="K">460K</span></div><div class="lbl">צפיות בתוכן נשק</div></div>
+        <div class="stat"><div class="n"><span class="ltr" data-count="10" data-suffix="K">10K</span></div><div class="lbl">חציון צפיות לסרטון</div></div>
+        <div class="stat">
+          <div class="n"><svg class="check" viewBox="0 0 64 64" role="img" aria-label="מאומת"><circle cx="32" cy="32" r="29"/><path d="M19 33l9 9 18-19"/></svg></div>
+          <div class="lbl">חשבון מאומת</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= תהליך ================= -->
   <section class="process" id="process" aria-labelledby="process-h">
     <div class="wrap">
@@ -598,15 +643,6 @@
         <li class="step"><span class="num" aria-hidden="true">3</span><b>יוצרים</b></li>
         <li class="step"><span class="num" aria-hidden="true">4</span><b>לומדים מהתוצאות</b></li>
       </ol>
-    </div>
-  </section>
-
-  <!-- ================= ערכים ================= -->
-  <section class="values" id="values" aria-labelledby="values-h">
-    <div class="wrap">
-      <h2 id="values-h" class="sr-only">הערכים</h2>
-      <p class="band">בטיחות. אחריות. <span class="or">שקיפות.</span></p>
-      <p class="note">כל תוכן בשיתוף פעולה מסומן בגילוי נאות.</p>
     </div>
   </section>
 
@@ -634,6 +670,7 @@
     <ul aria-label="רשתות">
       <li><a href="https://www.youtube.com/@Alon_Malik" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-yt"/></svg>יוטיוב</a></li>
       <li><a href="https://instagram.com/alonmalik_" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ig"/></svg>אינסטגרם</a></li>
+      <li><a href="https://x.com/malikalon7" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-x"/></svg>X</a></li>
       <li><a href="https://wa.me/972522350088" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>וואטסאפ</a></li>
       <li><a href="mailto:Desk@amalik.online"><svg aria-hidden="true"><use href="#i-mail"/></svg>מייל</a></li>
     </ul>
@@ -659,6 +696,7 @@
     if (h.indexOf('mailto:') === 0) return 'email';
     if (h.indexOf('instagram.com') > -1) return 'instagram';
     if (h.indexOf('youtube.com') > -1 || h.indexOf('youtu.be') > -1) return 'youtube';
+    if (h.indexOf('x.com') > -1) return 'x';
     return '';
   }
   window.__count = function(path, title){
